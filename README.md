@@ -1,1 +1,1 @@
-LU parallel matrix decomposition. Visualization on .NET MAUI
+*LU parallel matrix decomposition.* Visualization on **.NET MAUI**
