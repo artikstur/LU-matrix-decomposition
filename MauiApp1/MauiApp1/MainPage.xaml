@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.MainPage"
+             BackgroundColor="SkyBlue">
+
+    <ScrollView
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand">
+        <VerticalStackLayout
+            x:Name="MainLayout"
+            Padding="30,30"
+            Spacing="25"
+            BackgroundColor="SkyBlue">
+            <!--<Image
+                Source="dotnet_bot.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a race car number eight" />-->
+
+            <Label
+                Text="LU разложение матрицы"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1"
+                HorizontalTextAlignment="Center"/>
+
+            <Label
+                Text="Введите элементы матрицы"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Введите элементы матрицы"/>
+
+            <!--<Button
+                x:Name="CounterBtn"
+                Text="Разложить" 
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Fill" />-->
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
