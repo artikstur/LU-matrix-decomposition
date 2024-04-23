@@ -12,38 +12,67 @@ public class MatrixDecomposition : IMatrixDecomposition
         int n = matrix.GetLength(0);
         double[,] L = new double[n, n];
         double[,] U = new double[n, n];
+        object lockObject = new object();
+
+        Task[] tasks = new Task[n];
+
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < n; j++)
+            int localI = i; 
+            tasks[i] = Task.Run(() =>
             {
-                U[0, i] = matrix[0, i];
-                L[i, 0] = matrix[i, 0] / U[0, 0];
-                double sum = 0;
-                for (int k = 0; k < i; k++)
+                double sum;
+                for (int j = 0; j < n; j++)
                 {
-                    sum += L[i, k] * U[k, j];
-                }
-
-                U[i, j] = matrix[i, j] - sum;
-                if (i > j)
-                {
-                    L[j, i] = 0;
-                }
-                else
-                {
-                    sum = 0;
-                    for (int k = 0; k < i; k++)
+                    lock (lockObject)
                     {
-                        sum += L[j, k] * U[k, i];
+                        U[0, localI] = matrix[0, localI];
+                        L[localI, 0] = matrix[localI, 0] / U[0, 0];
+                        sum = 0;
+                        for (int k = 0; k < localI; k++)
+                        {
+                            sum += L[localI, k] * U[k, j];
+                        }
+                        U[localI, j] = matrix[localI, j] - sum;
+                        if (localI > j)
+                        {
+                            L[j, localI] = 0;
+                        }
+                        else
+                        {
+                            sum = 0;
+                            for (int k = 0; k < localI; k++)
+                            {
+                                sum += L[j, k] * U[k, localI];
+                            }
+                            L[j, localI] = (matrix[j, localI] - sum) / U[localI, localI];
+                        }
                     }
-
-                    L[j, i] = (matrix[j, i] - sum) / U[i, i];
                 }
-            }
+            });
         }
 
+        Task.WaitAll(tasks);
+
+        //PrintMatrix(matrix);
+        //Console.WriteLine();        
+        //PrintMatrix(L);
+        //Console.WriteLine();
+        //PrintMatrix(U);
+        //Console.WriteLine();
+        //PrintMatrix(MatrixMultiply(L, U));
+        //Console.WriteLine();
+        //PrintMatrix(MatrixMultiplyNotParallel(L, U));
+        
+        if (!AreMatricesEqual(matrix, MatrixMultiply(L, U)))
+        {
+            throw new Exception("Разложение выполнено неверно!!!");
+        }
+
+        Console.WriteLine("LU разложение выполнено успешно!");
         return (L, U);
     }
+
 
 
     private static double[,] CreateMatrixWithoutColumn(double[,] matrix, int column)
@@ -89,6 +118,7 @@ public class MatrixDecomposition : IMatrixDecomposition
     {
         int rows = matrix.GetLength(0);
         int cols = matrix.GetLength(1);
+
         if (rows != cols)
         {
             throw new InvalidOperationException("Введена не квадратная матрица");
@@ -111,5 +141,100 @@ public class MatrixDecomposition : IMatrixDecomposition
         });
 
         return result;
+    }
+
+    private static double[,] MatrixMultiply(double[,] matrixA, double[,] matrixB)
+    {
+        int aRows = matrixA.GetLength(0);
+        int aCols = matrixA.GetLength(1);
+        int bRows = matrixB.GetLength(0);
+        int bCols = matrixB.GetLength(1);
+
+        if (aCols != bRows)
+        {
+            throw new ArgumentException("Невозможно перемножить");
+        }
+
+        double[,] result = new double[aRows, bCols];
+
+        Parallel.For(0, aRows, i =>
+            {
+                for (int j = 0; j < bCols; ++j)
+                {
+                    for (int k = 0; k < aCols; ++k)
+                    {
+                        result[i, j] += matrixA[i, k] * matrixB[k, j];
+                    }
+                }
+            }
+        );
+
+        return result;
+    }
+
+    static void PrintMatrix(double[,] matrix)
+    {
+        int rows = matrix.GetLength(0);
+        int cols = matrix.GetLength(1);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                Console.Write(matrix[i, j].ToString("F2") + " "); // Отображение с двумя знаками после запятой
+            }
+            Console.WriteLine();
+        }
+    }
+
+    private static double[,] MatrixMultiplyNotParallel(double[,] matrixA, double[,] matrixB)
+    {
+        int aRows = matrixA.GetLength(0);
+        int aCols = matrixA.GetLength(1);
+        int bRows = matrixB.GetLength(0);
+        int bCols = matrixB.GetLength(1);
+
+        if (aCols != bRows)
+        {
+            throw new ArgumentException("Невозможно перемножить");
+        }
+
+        double[,] result = new double[aRows, bCols];
+
+        Parallel.For(0, aRows, i =>
+        {
+            for (int j = 0; j < bCols; ++j)
+            {
+                for (int k = 0; k < aCols; ++k)
+                {
+                    result[i, j] += matrixA[i, k] * matrixB[k, j];
+                }
+            }
+        });
+
+        return result;
+    }
+
+    static bool AreMatricesEqual(double[,] matrix1, double[,] matrix2)
+    {
+        if (matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
+        {
+            return false;
+        }
+
+        int rows = matrix1.GetLength(0);
+        int cols = matrix1.GetLength(1);
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                if (Math.Abs(matrix1[i, j] - matrix2[i, j]) > 0)
+                {
+                    return false; 
+                }
+            }
+        }
+
+        return true; 
     }
 }

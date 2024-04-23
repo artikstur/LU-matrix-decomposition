@@ -11,7 +11,6 @@ public class Program
             { 9, 8, 6 }
         };
 
-        double result = new MatrixDecomposition().CalculateDeterminant(matrix);
-        Console.WriteLine(result);
+        var matrixCore = new MatrixDecomposition().DoLuDecomposition(matrix);
     }
 }
