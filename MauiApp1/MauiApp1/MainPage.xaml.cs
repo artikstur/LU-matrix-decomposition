@@ -39,7 +39,7 @@ namespace MauiApp1
             Frame frame = new Frame
             {
                 Content = _mainGrid,
-                CornerRadius = 20, 
+                CornerRadius = 10, 
                 HasShadow = true, 
                 Padding = 15,
                 WidthRequest = n * 70,
