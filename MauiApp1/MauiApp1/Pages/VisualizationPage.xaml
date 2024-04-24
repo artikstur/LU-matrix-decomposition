@@ -5,6 +5,17 @@
              x:Class="MauiApp1.Pages.VisualizationPage"
              BackgroundColor="SkyBlue">
     <ContentPage.Content>
-        
+        <ScrollView
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+            <VerticalStackLayout
+                x:Name="VisualizationLayout"
+                Padding="30,30"
+                Spacing="25"
+                BackgroundColor="SkyBlue">
+
+
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

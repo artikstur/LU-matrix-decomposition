@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,13 +9,15 @@ namespace MauiApp1.Pages;
 
 public partial class EntryMatrixPage : ContentPage
 {
+    private Assembly _asm;
     private int _dimension;
     private Grid _mainGrid;
     private readonly List<Entry> _entries = new List<Entry>();
     private int[,] _matrix;
     Label _nameLabel;
-    public EntryMatrixPage(int dimension)
+    public EntryMatrixPage(int dimension, Assembly asm)
     {
+        _asm = asm;
         _dimension = dimension;
         InitializeComponent();
         InitializeGrid(dimension);
@@ -138,6 +141,6 @@ public partial class EntryMatrixPage : ContentPage
 
     private async void ToPage()
     {
-        await Navigation.PushAsync(new VisualizationPage(_matrix));
+        await Navigation.PushAsync(new VisualizationPage(_matrix, _asm));
     }
 }

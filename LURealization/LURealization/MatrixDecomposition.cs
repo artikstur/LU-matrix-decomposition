@@ -16,6 +16,11 @@ public class MatrixDecomposition : IMatrixDecomposition
 
         Task[] tasks = new Task[n];
 
+        if (CalculateDeterminant(matrix) == 0)
+        {
+            throw new ArgumentException("Данную матрицу невозможно разложить!");
+        }
+
         for (int i = 0; i < n; i++)
         {
             int localI = i; 
