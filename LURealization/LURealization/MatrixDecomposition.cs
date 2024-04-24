@@ -69,7 +69,6 @@ public class MatrixDecomposition : IMatrixDecomposition
             throw new Exception("Разложение выполнено неверно!!!");
         }
 
-        Console.WriteLine("LU разложение выполнено успешно!");
         return (L, U);
     }
 

@@ -25,7 +25,7 @@
                 HorizontalTextAlignment="Center"/>
 
             <Label
-                Text="Введите элементы матрицы"
+                Text="Введите размерность матрицы"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Введите элементы матрицы"/>

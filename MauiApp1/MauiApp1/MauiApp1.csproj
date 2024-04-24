@@ -64,12 +64,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\EntryMatrixPage.xaml.cs">
+	    <DependentUpon>EntryMatrixPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\VisualizationPage.xaml.cs">
 	    <DependentUpon>VisualizationPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\EntryMatrixPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\VisualizationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

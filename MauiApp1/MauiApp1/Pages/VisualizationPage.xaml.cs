@@ -13,6 +13,5 @@ public partial class VisualizationPage : ContentPage
     {
         _matrix = matrix;
         InitializeComponent();
-        Title = "Визуализация";
     }
 }
