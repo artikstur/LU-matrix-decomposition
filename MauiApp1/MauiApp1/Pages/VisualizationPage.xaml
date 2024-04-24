@@ -3,19 +3,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Pages.VisualizationPage"
-             BackgroundColor="SkyBlue">
+             BackgroundColor="#3FB39D">
     <ContentPage.Content>
         <ScrollView
             HorizontalOptions="CenterAndExpand"
             VerticalOptions="CenterAndExpand">
-            <VerticalStackLayout
+            <HorizontalStackLayout
                 x:Name="VisualizationLayout"
                 Padding="30,30"
                 Spacing="25"
-                BackgroundColor="SkyBlue">
-
-
-            </VerticalStackLayout>
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+            </HorizontalStackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

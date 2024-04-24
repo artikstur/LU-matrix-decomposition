@@ -5,7 +5,7 @@ using System.Xml;
 using MauiApp1.Pages;
 using System.Reflection;
 using Contract;
-using Color = System.Drawing.Color;
+
 
 
 namespace MauiApp1
@@ -70,6 +70,7 @@ namespace MauiApp1
             Button mainButton = new Button()
             {
                 Text = "Далее",
+                BackgroundColor = Color.FromArgb("#E47A36"),
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 WidthRequest = 200,

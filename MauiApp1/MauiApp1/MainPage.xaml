@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.MainPage"
-             BackgroundColor="SkyBlue">
+             BackgroundColor="#3FB39D">
 
     <ScrollView
         HorizontalOptions="CenterAndExpand"
@@ -11,7 +11,7 @@
             x:Name="MainLayout"
             Padding="30,30"
             Spacing="25"
-            BackgroundColor="SkyBlue">
+            BackgroundColor="#3FB39D">
             <!--<Image
                 Source="dotnet_bot.png"
                 HeightRequest="185"

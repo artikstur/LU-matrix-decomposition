@@ -13,4 +13,4 @@ public class Program
 
         var matrixCore = new MatrixDecomposition().DoLuDecomposition(matrix);
     }
-}
+}   

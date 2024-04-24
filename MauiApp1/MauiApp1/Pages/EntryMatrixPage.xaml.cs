@@ -13,7 +13,7 @@ public partial class EntryMatrixPage : ContentPage
     private int _dimension;
     private Grid _mainGrid;
     private readonly List<Entry> _entries = new List<Entry>();
-    private int[,] _matrix;
+    private double[,] _matrix;
     Label _nameLabel;
     public EntryMatrixPage(int dimension, Assembly asm)
     {
@@ -25,7 +25,7 @@ public partial class EntryMatrixPage : ContentPage
 
     private void InitializeGrid(int n)
     {
-        _matrix = new int[_dimension, _dimension];
+        _matrix = new double[_dimension, _dimension];
         _nameLabel = new Label { FontSize = 22 };
         EntryPageLayout.Children.Add(_nameLabel);
         _mainGrid = new Grid
@@ -45,7 +45,7 @@ public partial class EntryMatrixPage : ContentPage
             Padding = 15,
             WidthRequest = n * 70,
             HeightRequest = n * 70,
-            BackgroundColor = Colors.MediumPurple,
+            BackgroundColor = Color.FromArgb("#E14845"),
         };
 
         EntryPageLayout.Add(frame);
@@ -70,6 +70,7 @@ public partial class EntryMatrixPage : ContentPage
             WidthRequest = 200,
             HeightRequest = 60,
             FontSize = 18,
+            BackgroundColor = Color.FromArgb("#E47A36"),
         };
 
         mainButton.Clicked += (sender, e) =>
@@ -82,12 +83,12 @@ public partial class EntryMatrixPage : ContentPage
                 {
                     for (int j = 0; j < _dimension; j++)
                     {
-                        _matrix[i, j] = int.Parse(_entries[i * _dimension + j].Text);
+                        _matrix[i, j] = double.Parse(_entries[i * _dimension + j].Text);
                     }
                 }
 
                 ToPage();
-                _nameLabel.Text = string.Join(", ", _matrix.Cast<int>().Select(x => x.ToString()));
+                _nameLabel.Text = string.Join(", ", _matrix.Cast<double>().Select(x => x.ToString()));
             }
             else
             {
@@ -111,7 +112,7 @@ public partial class EntryMatrixPage : ContentPage
                     VerticalTextAlignment = TextAlignment.Center,
                     WidthRequest = 40,
                     HeightRequest = 40,
-                    MaxLength = 1,
+                    MaxLength = 5,
                     BackgroundColor = Colors.GhostWhite,
                 };
                 entry.TextChanged += EntryTextChanged;
@@ -136,7 +137,7 @@ public partial class EntryMatrixPage : ContentPage
             entry.Text = newText;
         }
 
-        _nameLabel.Text = string.Join(", ", _matrix.Cast<int>().Select(x => x.ToString()));
+        _nameLabel.Text = string.Join(", ", _matrix.Cast<double>().Select(x => x.ToString()));
     }
 
     private async void ToPage()

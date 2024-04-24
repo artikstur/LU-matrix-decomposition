@@ -1,6 +1,7 @@
 ﻿
 
 using System.ComponentModel.Design;
+using System.Drawing;
 using Contract;
 
 namespace LURealization;
@@ -12,9 +13,6 @@ public class MatrixDecomposition : IMatrixDecomposition
         int n = matrix.GetLength(0);
         double[,] L = new double[n, n];
         double[,] U = new double[n, n];
-        object lockObject = new object();
-
-        Task[] tasks = new Task[n];
 
         if (CalculateDeterminant(matrix) == 0)
         {
@@ -23,52 +21,49 @@ public class MatrixDecomposition : IMatrixDecomposition
 
         for (int i = 0; i < n; i++)
         {
-            int localI = i; 
-            tasks[i] = Task.Run(() =>
+            L[i, i] = 1;
+
+            Parallel.For(i, n, j =>
             {
-                double sum;
-                for (int j = 0; j < n; j++)
+                if (j < i)
                 {
-                    lock (lockObject)
-                    {
-                        U[0, localI] = matrix[0, localI];
-                        L[localI, 0] = matrix[localI, 0] / U[0, 0];
-                        sum = 0;
-                        for (int k = 0; k < localI; k++)
-                        {
-                            sum += L[localI, k] * U[k, j];
-                        }
-                        U[localI, j] = matrix[localI, j] - sum;
-                        if (localI > j)
-                        {
-                            L[j, localI] = 0;
-                        }
-                        else
-                        {
-                            sum = 0;
-                            for (int k = 0; k < localI; k++)
-                            {
-                                sum += L[j, k] * U[k, localI];
-                            }
-                            L[j, localI] = (matrix[j, localI] - sum) / U[localI, localI];
-                        }
-                    }
+                    L[j, i] = 0;
+                    return;
+                }
+
+                U[i, j] = matrix[i, j];
+                for (int k = 0; k < i; k++)
+                {
+                    U[i, j] -= L[i, k] * U[k, j];
+                }
+            });
+
+            Parallel.For(i + 1, n, j =>
+            {
+                if (j < i)
+                {
+                    return;
+                }
+
+                L[j, i] = matrix[j, i] / U[i, i];
+                for (int k = 0; k < i; k++)
+                {
+                    L[j, i] -= L[j, k] * U[k, i] / U[i, i];
                 }
             });
         }
 
-        Task.WaitAll(tasks);
 
-        //PrintMatrix(matrix);
-        //Console.WriteLine();        
-        //PrintMatrix(L);
-        //Console.WriteLine();
-        //PrintMatrix(U);
-        //Console.WriteLine();
-        //PrintMatrix(MatrixMultiply(L, U));
-        //Console.WriteLine();
-        //PrintMatrix(MatrixMultiplyNotParallel(L, U));
-        
+        PrintMatrix(matrix);
+        Console.WriteLine();
+        PrintMatrix(L);
+        Console.WriteLine();
+        PrintMatrix(U);
+        Console.WriteLine();
+        PrintMatrix(MatrixMultiply(L, U));
+        Console.WriteLine();
+        PrintMatrix(MatrixMultiplyNotParallel(L, U));
+
         if (!AreMatricesEqual(matrix, MatrixMultiply(L, U)))
         {
             throw new Exception("Разложение выполнено неверно!!!");
@@ -76,7 +71,6 @@ public class MatrixDecomposition : IMatrixDecomposition
 
         return (L, U);
     }
-
 
 
     private static double[,] CreateMatrixWithoutColumn(double[,] matrix, int column)
@@ -138,10 +132,7 @@ public class MatrixDecomposition : IMatrixDecomposition
         Parallel.For(0, cols, j =>
         {
             double minorDeterminant = CalculateDeterminant(CreateMatrixWithoutColumn(CreateMatrixWithoutRow(matrix, 0), j));
-            lock (lockObj)
-            {
-                result += (j % 2 == 1 ? -1 : 1) * matrix[0, j] * minorDeterminant;
-            }
+            result += (j % 2 == 1 ? -1 : 1) * matrix[0, j] * minorDeterminant;
         });
 
         return result;
