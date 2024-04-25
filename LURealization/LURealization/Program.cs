@@ -6,10 +6,15 @@ public class Program
     {
 
         double[,] matrix = new double[,] {
-            { 4, 2, 1 },
-            { 7, 5, 10 },
-            { 9, 8, 6 }
+            { 2, 1, 0, 0, 0, 0, 0 },
+            { 1, 2, 1, 0, 0, 0, 0 },
+            { 0, 1, 2, 1, 0, 0, 0 },
+            { 0, 0, 1, 2, 1, 0, 0 },
+            { 0, 0, 0, 1, 2, 1, 0 },
+            { 0, 0, 0, 0, 1, 2, 1 },
+            { 0, 0, 0, 0, 0, 1, 2 }
         };
+
 
         var matrixCore = new MatrixDecomposition().DoLuDecomposition(matrix);
     }

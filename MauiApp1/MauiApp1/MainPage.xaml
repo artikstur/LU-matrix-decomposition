@@ -2,40 +2,49 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.MainPage"
-             BackgroundColor="#3FB39D">
+             Background="{DynamicResource MyPrimary}">
 
     <ScrollView
-        HorizontalOptions="CenterAndExpand"
-        VerticalOptions="CenterAndExpand">
+        HorizontalOptions="CenterAndExpand">
         <VerticalStackLayout
             x:Name="MainLayout"
             Padding="30,30"
             Spacing="25"
-            BackgroundColor="#3FB39D">
+            Background="{DynamicResource MyPrimary}">
             <!--<Image
                 Source="dotnet_bot.png"
                 HeightRequest="185"
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a race car number eight" />-->
 
+            <BoxView HeightRequest="50" 
+                     Background="{DynamicResource MyPrimary}"/>
+
+            <Button
+                x:Name="CounterBtn"
+                Text="Тема" 
+                Clicked="ChangeTheme"
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                WidthRequest="100"
+                HeightRequest="40"
+                Background="{DynamicResource ChangeTheme}"/>
+
             <Label
                 Text="LU разложение матрицы"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"
-                HorizontalTextAlignment="Center"/>
+                HorizontalTextAlignment="Center"
+                TextColor="{DynamicResource TextColor}"/>
 
             <Label
                 Text="Введите размерность матрицы"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Введите элементы матрицы"/>
+                SemanticProperties.Description="Введите элементы матрицы"
+                TextColor="{DynamicResource TextColor}"/>
 
-            <!--<Button
-                x:Name="CounterBtn"
-                Text="Разложить" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />-->
+            
         </VerticalStackLayout>
     </ScrollView>
 

@@ -16,7 +16,7 @@ public class MatrixDecomposition : IMatrixDecomposition
 
         if (CalculateDeterminant(matrix) == 0)
         {
-            throw new ArgumentException("Данную матрицу невозможно разложить!");
+            return (null, null);
         }
 
         for (int i = 0; i < n; i++)

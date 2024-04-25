@@ -3,29 +3,44 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.Pages.EntryMatrixPage"
-             BackgroundColor="#3FB39D">
+             Background="{DynamicResource MyPrimary}">
     <ContentPage.Content>
-        <ScrollView
-            HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand">
+        <ScrollView>
             <VerticalStackLayout
                 x:Name="EntryPageLayout"
-                Padding="30,30"
-                Spacing="25"
-                BackgroundColor="#3FB39D">
+                Padding="30,10"
+                Spacing="10"
+                Background="{DynamicResource MyPrimary}">
 
+                <BoxView HeightRequest="50" 
+                         Background="{DynamicResource MyPrimary}"/>
+
+                <Button
+                    x:Name="ChangeThemeBtn"
+                    Text="Тема" 
+                    TextColor="White"
+                    Clicked="ChangeTheme"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    WidthRequest="100"
+                    HeightRequest="40"
+                    Background="{DynamicResource ChangeTheme}"/>
 
                 <Label
                     Text="LU разложение матрицы"
-                    Style="{StaticResource Headline}"
                     SemanticProperties.HeadingLevel="Level1"
-                    HorizontalTextAlignment="Center"/>
+                    HorizontalTextAlignment="Center"
+                    TextColor ="{DynamicResource TextColor}"
+                    FontSize = "32"
+                    HorizontalOptions = "Center"/>
 
                 <Label
                     Text="Введите элементы матрицы"
-                    Style="{StaticResource SubHeadline}"
-                    SemanticProperties.HeadingLevel="Level2"
-                    SemanticProperties.Description="Введите элементы матрицы"/>
+                    SemanticProperties.HeadingLevel="Level1"
+                    HorizontalTextAlignment="Center"
+                    TextColor ="{DynamicResource TextColor}"
+                    FontSize = "32"
+                    HorizontalOptions = "Center"/>
 
             </VerticalStackLayout>
         </ScrollView>

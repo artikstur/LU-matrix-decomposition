@@ -1,10 +1,9 @@
-﻿
-using MauiApp1.ViewModel;
-using System.Security.AccessControl;
+﻿using System.Security.AccessControl;
 using System.Xml;
 using MauiApp1.Pages;
 using System.Reflection;
 using Contract;
+using Microsoft.Maui.Platform;
 
 
 
@@ -16,7 +15,7 @@ namespace MauiApp1
         private string _path;
         private Assembly _currentAssembly;
         private bool _assemblyStatus;
-        private Button dllButton = new ()
+        private Button _dllButton = new ()
         {
             Text = "Загрузить сборку",
             HorizontalOptions = LayoutOptions.Center,
@@ -25,6 +24,7 @@ namespace MauiApp1
             HeightRequest = 60,
             FontSize = 20,
         };
+
         public MainPage()
         {
             InitializeComponent();
@@ -55,14 +55,15 @@ namespace MauiApp1
 
         private void AddGetDllButton()
         {
-            dllButton.BackgroundColor = Colors.Red;
+            _dllButton.BackgroundColor = Colors.Red;
+            _dllButton.SetDynamicResource(Button.TextColorProperty, "TextColor");
 
-            dllButton.Clicked += (sender, e) =>
+            _dllButton.Clicked += (sender, e) =>
             {
                 PickDllFile();
             };
 
-            MainLayout.Children.Add(dllButton);
+            MainLayout.Children.Add(_dllButton);
         }
 
         private void AddMainButton()
@@ -70,7 +71,6 @@ namespace MauiApp1
             Button mainButton = new Button()
             {
                 Text = "Далее",
-                BackgroundColor = Color.FromArgb("#E47A36"),
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 WidthRequest = 200,
@@ -78,6 +78,8 @@ namespace MauiApp1
                 FontSize = 18,
             };
 
+            mainButton.SetDynamicResource(Button.BackgroundProperty, "MySecondary");
+            mainButton.SetDynamicResource(Button.TextColorProperty, "TextColor");
             mainButton.Clicked += (sender, e) =>
             {
                 ToPage();
@@ -127,7 +129,7 @@ namespace MauiApp1
             _assemblyStatus = hasImplementation;
             if (_assemblyStatus)
             {
-                dllButton.BackgroundColor = Colors.Green;
+                _dllButton.BackgroundColor = Colors.Green;
             }
             else
             {
@@ -149,7 +151,7 @@ namespace MauiApp1
             {
                 if (_assemblyStatus)
                 {
-                    await Navigation.PushAsync(new EntryMatrixPage(_dimension, _currentAssembly));
+                    await Navigation.PushAsync(new EntryMatrixPage(_dimension, _currentAssembly), true);
                 }
                 else
                 {
@@ -160,6 +162,19 @@ namespace MauiApp1
             {
                 DisplayAlert("Ошибка", "Матрицы слишком мала. Введите размерность минимум: 3", "OK");
             }
+        }
+
+        private void ChangeTheme(object sender, EventArgs e)
+        {
+            if (ThemeManager.SelectedTheme == nameof(MauiApp1.Resources.Themes.Dark))
+            {
+                ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Default));
+            }
+            else
+            {
+                ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Dark));
+            }
+
         }
     }
 }

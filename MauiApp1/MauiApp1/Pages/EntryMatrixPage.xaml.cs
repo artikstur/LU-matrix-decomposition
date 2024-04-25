@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Maui.Platform;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,6 @@ public partial class EntryMatrixPage : ContentPage
     private Grid _mainGrid;
     private readonly List<Entry> _entries = new List<Entry>();
     private double[,] _matrix;
-    Label _nameLabel;
     public EntryMatrixPage(int dimension, Assembly asm)
     {
         _asm = asm;
@@ -26,8 +26,6 @@ public partial class EntryMatrixPage : ContentPage
     private void InitializeGrid(int n)
     {
         _matrix = new double[_dimension, _dimension];
-        _nameLabel = new Label { FontSize = 22 };
-        EntryPageLayout.Children.Add(_nameLabel);
         _mainGrid = new Grid
         {
             ColumnSpacing = 5,
@@ -39,6 +37,7 @@ public partial class EntryMatrixPage : ContentPage
 
         Frame frame = new Frame
         {
+            Margin = 20,
             Content = _mainGrid,
             CornerRadius = 10,
             HasShadow = true,
@@ -47,6 +46,8 @@ public partial class EntryMatrixPage : ContentPage
             HeightRequest = n * 70,
             BackgroundColor = Color.FromArgb("#E14845"),
         };
+
+        frame.SetDynamicResource(BackgroundProperty, "MyTertiary");
 
         EntryPageLayout.Add(frame);
 
@@ -70,8 +71,12 @@ public partial class EntryMatrixPage : ContentPage
             WidthRequest = 200,
             HeightRequest = 60,
             FontSize = 18,
-            BackgroundColor = Color.FromArgb("#E47A36"),
+            Margin = 30,
+
         };
+
+        mainButton.SetDynamicResource(BackgroundProperty, "MySecondary");
+        mainButton.SetDynamicResource(Button.TextColorProperty, "TextColor");
 
         mainButton.Clicked += (sender, e) =>
         {
@@ -86,9 +91,7 @@ public partial class EntryMatrixPage : ContentPage
                         _matrix[i, j] = double.Parse(_entries[i * _dimension + j].Text);
                     }
                 }
-
                 ToPage();
-                _nameLabel.Text = string.Join(", ", _matrix.Cast<double>().Select(x => x.ToString()));
             }
             else
             {
@@ -110,11 +113,13 @@ public partial class EntryMatrixPage : ContentPage
                 {
                     HorizontalTextAlignment = TextAlignment.Center,
                     VerticalTextAlignment = TextAlignment.Center,
+                    FontSize = 16,
                     WidthRequest = 40,
                     HeightRequest = 40,
                     MaxLength = 5,
                     BackgroundColor = Colors.GhostWhite,
                 };
+                
                 entry.TextChanged += EntryTextChanged;
 
                 _entries.Add(entry);
@@ -137,11 +142,23 @@ public partial class EntryMatrixPage : ContentPage
             entry.Text = newText;
         }
 
-        _nameLabel.Text = string.Join(", ", _matrix.Cast<double>().Select(x => x.ToString()));
     }
 
     private async void ToPage()
     {
         await Navigation.PushAsync(new VisualizationPage(_matrix, _asm));
+    }
+
+    private void ChangeTheme(object sender, EventArgs e)
+    {
+        if (ThemeManager.SelectedTheme == nameof(MauiApp1.Resources.Themes.Dark))
+        {
+            ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Default));
+        }
+        else
+        {
+            ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Dark));
+        }
+
     }
 }

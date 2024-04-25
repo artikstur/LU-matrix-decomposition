@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.Resources.Themes.Default">
+    <Color x:Key="MyPrimary">#bcb8b1</Color>
+    <Color x:Key="MySecondary">#e0afa0</Color>
+    <Color x:Key="MyTertiary">#890620</Color>
+    <Color x:Key="TextColor">Black</Color>
+    <Color x:Key="ChangeTheme">#240A34</Color>
+
+    <SolidColorBrush x:Key="MyPrimaryBrush" Color="{StaticResource MyPrimary}"/>
+    <SolidColorBrush x:Key="MySecondaryBrush" Color="{StaticResource MySecondary}"/>
+    <SolidColorBrush x:Key="MyTertiaryBrush" Color="{StaticResource MyTertiary}"/>
+</ResourceDictionary>
