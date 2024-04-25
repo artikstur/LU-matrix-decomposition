@@ -19,7 +19,6 @@ public static class ThemeManager
 
         var themeToBeApplied = _themes[themeName];
 
-
         Task.Run(() =>
         {
             Application.Current.Dispatcher.Dispatch(() =>

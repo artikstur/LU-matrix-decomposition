@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Platform;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Platform;
 using Microsoft.Maui.Primitives;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,66 @@ public partial class VisualizationPage : ContentPage
     private double[,]? lowerMatrix;
     private double[,]? upperMatrix;
 
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        var nigga = "nigga1488";
+    }
+
     public VisualizationPage(double[,] matrix, Assembly asm)
     {
         _matrix = matrix;
         n = _matrix.GetLength(0);
         _asm = asm;
         InitializeComponent();
-        GetDataFromDll();
-        InitializeGrid();
+
+        GetAsync();
+    }
+    private async Task GetAsync()
+    {
+        await Task.Delay(1000);
+        await GetDataFromDll();
+    }
+    private void AddChangeThemeButton()
+    {
+        Button button = new Button()
+        {
+            Text = "Тема",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.CenterAndExpand,
+            WidthRequest = 200,
+            HeightRequest = 60,
+            FontSize = 18,
+            Margin = 30,
+            TextColor = Colors.White,
+        };
+
+        button.SetDynamicResource(BackgroundProperty, "ChangeTheme");
+
+        button.Clicked += ChangeTheme;
+
+        VisualizationLayout.Children.Add(button);
+    }
+
+    private void AddGoBackButton()
+    {
+        Button button = new Button()
+        {
+            Text = "Назад",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.CenterAndExpand,
+            WidthRequest = 200,
+            HeightRequest = 60,
+            FontSize = 18,
+            Margin = 30,
+        };
+
+        button.SetDynamicResource(BackgroundProperty, "MyTertiary");
+        button.SetDynamicResource(Button.TextColorProperty, "TextColor");
+
+        button.Clicked += ToMainPage;
+
+        VisualizationLayout.Children.Add(button);
     }
 
     private void InitializeGrid()
@@ -33,8 +86,8 @@ public partial class VisualizationPage : ContentPage
 
         if (lowerMatrix == null || upperMatrix == null)
         {
-            DisplayAlert("Ошибка", "Данную матрицу невозможно разложить", "OK");
-            ToMainPage();
+            AddGoBackButton();
+            DisplayAlert("Ошибка", "Данную матрицу не разложить", "Ок");
             return;
         }
 
@@ -139,9 +192,11 @@ public partial class VisualizationPage : ContentPage
 
         VisualizationLayout.Children.Add(lStackLayout);
         VisualizationLayout.Children.Add(uStackLayout);
+
+        var x = "nigger";
     }
 
-    private void GetDataFromDll()
+    private async Task GetDataFromDll()
     {
         Type? matrixDecompositionType = _asm.GetTypes().FirstOrDefault(t => t.Name == "MatrixDecomposition");
 
@@ -149,17 +204,32 @@ public partial class VisualizationPage : ContentPage
 
         MethodInfo? method = matrixDecompositionType.GetMethod("DoLuDecomposition");
 
-        var result = (ValueTuple<double[,], double[,]>)method.Invoke(matrixDecompositionInstance, new object[] { _matrix });
+        var result = (ValueTuple<double[,], double[,]>)(method.Invoke(matrixDecompositionInstance, new object[] { _matrix }));
+
+        await Task.FromResult(result);
 
         lowerMatrix = result.Item1;
         upperMatrix = result.Item2;
+
+        InitializeGrid();
     }
 
-
-    private async void ToMainPage()
+    private async void ToMainPage(object sender, EventArgs e)
     {
-        await Task.Delay(1000);
+        await Task.Delay(100);
         await Navigation.PopAsync();
     }
 
+    private void ChangeTheme(object sender, EventArgs e)
+    {
+        if (ThemeManager.SelectedTheme == nameof(MauiApp1.Resources.Themes.Dark))
+        {
+            ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Default));
+        }
+        else
+        {
+            ThemeManager.SetTheme(nameof(MauiApp1.Resources.Themes.Dark));
+        }
+
+    }
 }

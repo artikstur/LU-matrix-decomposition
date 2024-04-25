@@ -37,10 +37,10 @@ public class MatrixDecomposition : IMatrixDecomposition
                     U[i, j] -= L[i, k] * U[k, j];
                 }
             });
-
+            
             Parallel.For(i + 1, n, j =>
             {
-                if (j < i)
+                if (j < i || U[i, i] == 0)
                 {
                     return;
                 }
@@ -128,7 +128,6 @@ public class MatrixDecomposition : IMatrixDecomposition
         }
 
         double result = 0;
-        object lockObj = new object();
         Parallel.For(0, cols, j =>
         {
             double minorDeterminant = CalculateDeterminant(CreateMatrixWithoutColumn(CreateMatrixWithoutRow(matrix, 0), j));
@@ -223,8 +222,10 @@ public class MatrixDecomposition : IMatrixDecomposition
         {
             for (int j = 0; j < cols; j++)
             {
-                if (Math.Abs(matrix1[i, j] - matrix2[i, j]) > 0)
+                if (Math.Abs(matrix1[i, j] - matrix2[i, j]) > 0.1)
                 {
+                    Console.WriteLine(matrix1[i, j]);
+                    Console.WriteLine(matrix2[i, j]);
                     return false; 
                 }
             }

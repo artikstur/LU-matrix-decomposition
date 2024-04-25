@@ -7,7 +7,8 @@
     <ContentPage.Content>
         <ScrollView
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand">
+            VerticalOptions="CenterAndExpand"
+            Orientation="Both">
 
             <HorizontalStackLayout
                 x:Name="VisualizationLayout"
@@ -15,6 +16,7 @@
                 Spacing="25"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand">
+
             </HorizontalStackLayout>
 
         </ScrollView>

@@ -4,7 +4,7 @@
              x:Class="MauiApp1.Resources.Themes.Default">
     <Color x:Key="MyPrimary">#bcb8b1</Color>
     <Color x:Key="MySecondary">#e0afa0</Color>
-    <Color x:Key="MyTertiary">#890620</Color>
+    <Color x:Key="MyTertiary">#f85e00</Color>
     <Color x:Key="TextColor">Black</Color>
     <Color x:Key="ChangeTheme">#240A34</Color>
 
