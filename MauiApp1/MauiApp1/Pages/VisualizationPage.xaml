@@ -13,7 +13,7 @@
             <HorizontalStackLayout
                 x:Name="VisualizationLayout"
                 Padding="30,30"
-                Spacing="25"
+                Spacing="50"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand">
 

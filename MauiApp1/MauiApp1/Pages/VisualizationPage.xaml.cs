@@ -115,20 +115,17 @@ public partial class VisualizationPage : ContentPage
 
         Frame lFrame = new Frame
         {
-            Margin = 30,
             Content = lGrid,
             CornerRadius = 10,
             HasShadow = true,
-            Padding = 15,
+            Padding = new Thickness(15),
             WidthRequest = n * 90,
             HeightRequest = n * 90,
             BackgroundColor = Color.FromArgb("#FFFF99"),
         };
 
-        lFrame.SetDynamicResource(BackgroundProperty, "MySecondary");
         Frame uFrame = new Frame
         {
-            Margin = 30,
             Content = uGrid,
             CornerRadius = 10,
             HasShadow = true,
@@ -136,6 +133,8 @@ public partial class VisualizationPage : ContentPage
             HeightRequest = n * 90,
             BackgroundColor = Color.FromArgb("#4682B4"),
         };
+
+        lFrame.SetDynamicResource(BackgroundProperty, "MySecondary");
         uFrame.SetDynamicResource(BackgroundProperty, "MySecondary");
 
         for (int i = 0; i < n; i++)
@@ -209,15 +208,12 @@ public partial class VisualizationPage : ContentPage
         lTextLabel.SetDynamicResource(Label.TextColorProperty, "TextColor");
         uTextLabel.SetDynamicResource(Label.TextColorProperty, "TextColor");
 
-        if (lowerMatrix.GetLength(0) > 8)
+        if (lowerMatrix.GetLength(0) > 7)
         {
-            lStackLayout.Scale = 0.65;
-            uStackLayout.Scale = 0.65;
-            uFrame.Margin = 5;
-            lFrame.Margin = 5;
-            VisualizationLayout.Spacing = 0;
-            VisualizationLayout.HorizontalOptions = LayoutOptions.Center;
-            VisualizationLayout.VerticalOptions = LayoutOptions.Center;
+            VisualizationLayout.Scale = 0.65;
+            VisualizationLayout.Padding = 0;
+            VisualizationLayout.HorizontalOptions = LayoutOptions.Start;
+            VisualizationLayout.VerticalOptions = LayoutOptions.Start;
         }
 
         VisualizationLayout.Children.Add(lStackLayout);
