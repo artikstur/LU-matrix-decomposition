@@ -8,7 +8,7 @@ public static class ThemeManager
         [nameof(Resources.Themes.Dark)] = new Resources.Themes.Dark(),
     };
 
-    public static string? SelectedTheme { get; set; }
+    public static string? SelectedTheme { get; set; } = nameof(MauiApp1.Resources.Themes.Dark);
 
     public static async Task SetTheme(string themeName)
     {

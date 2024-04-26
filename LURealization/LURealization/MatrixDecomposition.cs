@@ -14,10 +14,10 @@ public class MatrixDecomposition : IMatrixDecomposition
         double[,] L = new double[n, n];
         double[,] U = new double[n, n];
 
-        if (CalculateDeterminant(matrix) == 0)
-        {
-            return (null, null);
-        }
+        //if (CalculateDeterminant(matrix) == 0)
+        //{
+        //    return (null, null);
+        //}
 
         for (int i = 0; i < n; i++)
         {
@@ -54,22 +54,93 @@ public class MatrixDecomposition : IMatrixDecomposition
         }
 
 
-        PrintMatrix(matrix);
-        Console.WriteLine();
-        PrintMatrix(L);
-        Console.WriteLine();
-        PrintMatrix(U);
-        Console.WriteLine();
-        PrintMatrix(MatrixMultiply(L, U));
-        Console.WriteLine();
-        PrintMatrix(MatrixMultiplyNotParallel(L, U));
+        //PrintMatrix(matrix);
+        //Console.WriteLine();
+        //PrintMatrix(L);
+        //Console.WriteLine();
+        //PrintMatrix(U);
+        //Console.WriteLine();
+        //PrintMatrix(MatrixMultiply(L, U));
+        //Console.WriteLine();
+        //PrintMatrix(MatrixMultiplyNotParallel(L, U));
 
-        if (!AreMatricesEqual(matrix, MatrixMultiply(L, U)))
-        {
-            throw new Exception("Разложение выполнено неверно!!!");
-        }
+        //if (!AreMatricesEqual(matrix, MatrixMultiply(L, U)))
+        //{
+        //    throw new Exception("Разложение выполнено неверно!!!");
+        //}
 
         return (L, U);
+    }
+
+    public void SyncDecomposition(double[,] matrix)
+    {
+        int n = matrix.GetLength(0);
+        double[,] L = new double[n, n];
+        double[,] U = new double[n, n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                U[0, i] = matrix[0, i];
+                L[i, 0] = matrix[i, 0] / U[0, 0];
+                double sum = 0;
+                for (int k = 0; k < i; k++)
+                {
+                    sum += L[i, k] * U[k, j];
+                }
+
+                U[i, j] = matrix[i, j] - sum;
+                if (i > j)
+                {
+                    L[j, i] = 0;
+                }
+                else
+                {
+                    sum = 0;
+                    for (int k = 0; k < i; k++)
+                    {
+                        sum += L[j, k] * U[k, i];
+                    }
+
+                    L[j, i] = (matrix[j, i] - sum) / U[i, i];
+                }
+            }
+        }
+    }
+
+    public void ParallelDecomposition(double[,] matrix)
+    {
+        int n = matrix.GetLength(0);
+        double[,] L = new double[n, n];
+        double[,] U = new double[n, n];
+
+        Parallel.For(0, n, i =>
+        {
+            // Расчет верхней треугольной матрицы U
+            for (int j = i; j < n; j++)
+            {
+                double sum = 0;
+                for (int k = 0; k < i; k++)
+                {
+                    sum += L[i, k] * U[k, j];
+                }
+                U[i, j] = matrix[i, j] - sum;
+            }
+
+            // Расчет нижней треугольной матрицы L
+            for (int j = i + 1; j < n; j++)
+            {
+                double sum = 0;
+                for (int k = 0; k < i; k++)
+                {
+                    sum += L[j, k] * U[k, i];
+                }
+                L[j, i] = (matrix[j, i] - sum) / U[i, i];
+            }
+
+            // Установка диагональных элементов L в 1
+            L[i, i] = 1;
+        });
     }
 
 

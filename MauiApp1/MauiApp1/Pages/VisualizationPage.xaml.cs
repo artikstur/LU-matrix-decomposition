@@ -17,11 +17,21 @@ public partial class VisualizationPage : ContentPage
     private Assembly _asm;
     private double[,]? lowerMatrix;
     private double[,]? upperMatrix;
+    private Label timerLabel = new Label()
+    {
+        TextColor = Colors.White
+    };
+
+    private ActivityIndicator activityIndicator = new ActivityIndicator()
+    {
+        IsRunning = true,
+        HeightRequest = 100,
+        WidthRequest = 100,
+    };
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        var nigga = "nigga1488";
     }
 
     public VisualizationPage(double[,] matrix, Assembly asm)
@@ -30,14 +40,23 @@ public partial class VisualizationPage : ContentPage
         n = _matrix.GetLength(0);
         _asm = asm;
         InitializeComponent();
+        AddActivityCircle();
+        _ = GetAsync();
+    }
 
-        GetAsync();
+    private void AddActivityCircle()
+    {
+        VisualizationLayout.Children.Add(activityIndicator);
     }
     private async Task GetAsync()
     {
-        await Task.Delay(1000);
-        await GetDataFromDll();
+        await Task.Delay(500);
+        await Task.Run(() =>
+        {
+            GetDataFromDll();
+        });
     }
+
     private void AddChangeThemeButton()
     {
         Button button = new Button()
@@ -193,10 +212,10 @@ public partial class VisualizationPage : ContentPage
         VisualizationLayout.Children.Add(lStackLayout);
         VisualizationLayout.Children.Add(uStackLayout);
 
-        var x = "nigger";
+        VisualizationLayout.Children.Remove(activityIndicator);
     }
 
-    private async Task GetDataFromDll()
+    private void GetDataFromDll()
     {
         Type? matrixDecompositionType = _asm.GetTypes().FirstOrDefault(t => t.Name == "MatrixDecomposition");
 
@@ -206,18 +225,29 @@ public partial class VisualizationPage : ContentPage
 
         var result = (ValueTuple<double[,], double[,]>)(method.Invoke(matrixDecompositionInstance, new object[] { _matrix }));
 
-        await Task.FromResult(result);
-
         lowerMatrix = result.Item1;
         upperMatrix = result.Item2;
 
-        InitializeGrid();
+        MainThread.BeginInvokeOnMainThread(InitializeGrid);
+  
     }
 
     private async void ToMainPage(object sender, EventArgs e)
     {
         await Task.Delay(100);
         await Navigation.PopAsync();
+    }
+
+    private async void StartTimer()
+    {
+        int seconds = 0;
+        VisualizationLayout.Children.Add(timerLabel);
+        while (true)
+        {
+            timerLabel.Text = $"Время: {seconds++} сек";
+
+            await Task.Delay(1000);
+        }
     }
 
     private void ChangeTheme(object sender, EventArgs e)
