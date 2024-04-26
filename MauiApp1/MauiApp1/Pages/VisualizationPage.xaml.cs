@@ -94,7 +94,7 @@ public partial class VisualizationPage : ContentPage
         button.SetDynamicResource(BackgroundProperty, "MyTertiary");
         button.SetDynamicResource(Button.TextColorProperty, "TextColor");
 
-        button.Clicked += ToMainPage;
+        //button.Clicked += ToMainPage;
 
         VisualizationLayout.Children.Add(button);
     }
@@ -105,8 +105,8 @@ public partial class VisualizationPage : ContentPage
 
         if (lowerMatrix == null || upperMatrix == null)
         {
-            AddGoBackButton();
             DisplayAlert("Ошибка", "Данную матрицу не разложить", "Ок");
+            ToMainPage();
             return;
         }
 
@@ -209,6 +209,17 @@ public partial class VisualizationPage : ContentPage
         lTextLabel.SetDynamicResource(Label.TextColorProperty, "TextColor");
         uTextLabel.SetDynamicResource(Label.TextColorProperty, "TextColor");
 
+        if (lowerMatrix.GetLength(0) > 8)
+        {
+            lStackLayout.Scale = 0.65;
+            uStackLayout.Scale = 0.65;
+            uFrame.Margin = 5;
+            lFrame.Margin = 5;
+            VisualizationLayout.Spacing = 0;
+            VisualizationLayout.HorizontalOptions = LayoutOptions.Center;
+            VisualizationLayout.VerticalOptions = LayoutOptions.Center;
+        }
+
         VisualizationLayout.Children.Add(lStackLayout);
         VisualizationLayout.Children.Add(uStackLayout);
 
@@ -232,7 +243,7 @@ public partial class VisualizationPage : ContentPage
   
     }
 
-    private async void ToMainPage(object sender, EventArgs e)
+    private async void ToMainPage()
     {
         await Task.Delay(100);
         await Navigation.PopAsync();
